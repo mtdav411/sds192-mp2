@@ -8,9 +8,13 @@ output: html_document
 
 ## Loading the data
 
-This project is so interesting and relevant to my life!
+This project is so interesting and relevant to my life! blue
 
 ```{r, include=FALSE}
+library(tidyverse)
+library(babynames)
+library(scales)
+library(ggplot2)
 load("house_elections.rda")
 load("candidates.rda")
 load("committees.rda")
