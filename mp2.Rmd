@@ -9,7 +9,7 @@ hhjgjh
 ## Loading the data
 
 This project is so interesting and relevant to my life! blue
-
+yellored ink
 ```{r, include=FALSE}
 library(tidyverse)
 library(babynames)
@@ -20,3 +20,9 @@ load("candidates.rda")
 load("committees.rda")
 load("contributions.rda")
 ```
+
+
+```{r}
+
+```
+
