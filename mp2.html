@@ -137,8 +137,39 @@ $(document).ready(function () {
 <div id="loading-the-data" class="section level2">
 <h2>Loading the data</h2>
 <p>This project is so interesting and relevant to my life!</p>
+<<<<<<< HEAD
 <pre class="r"><code>president &lt;- candidates %&gt;% filter(cand_office==&quot;P&quot;) %&gt;% select(cand_name,cand_party_affiliation,cand_election_yr,cand_state)</code></pre>
 >>>>>>> 237af90c3ad218d9a408a6f634197202de8f421f
+=======
+<pre class="r"><code>#selecting variables
+president &lt;- candidates %&gt;% filter(cand_office==&quot;P&quot;) %&gt;% select(cand_name,cand_party_affiliation,cand_election_yr,cand_state)
+indiv &lt;- individuals %&gt;% select(cmte_id, transaction_amt, occupation, employer, state, transaction_pgi) %&gt;% filter(state==&quot;MA&quot;)
+comit &lt;- committees %&gt;% select(cmte_id, cmte_name, cmte_state, cmte_dsgn,cmte_type, cmte_party_affiliation, org_type) %&gt;% filter (cmte_type==&quot;Q&quot;)
+
+#recoding org_type
+comit$org_type[comit$org_type==&quot;C&quot;] &lt;- &quot;Corporation&quot;
+comit$org_type[comit$org_type==&quot;L&quot;] &lt;- &quot;Labor organization&quot;
+comit$org_type[comit$org_type==&quot;M&quot;] &lt;- &quot;Membership organization&quot;
+comit$org_type[comit$org_type==&quot;T&quot;] &lt;- &quot;Trade association&quot;
+comit$org_type[comit$org_type==&quot;V&quot;] &lt;- &quot;Cooperative&quot;
+comit$org_type[comit$org_type==&quot;W&quot;] &lt;- &quot;Corporation without capital stock&quot;
+
+#join
+df &lt;- indiv %&gt;% left_join(comit, by =&quot;cmte_id&quot;)
+head(df) </code></pre>
+<pre><code>## # A tibble: 6 x 12
+##     cmte_id transaction_amt occupation                       employer
+##       &lt;chr&gt;           &lt;dbl&gt;      &lt;chr&gt;                          &lt;chr&gt;
+## 1 C00364158             500  PHYSICIAN       HARVARD VANGUARD MEDICAL
+## 2 C00364158             500  PHYSICIAN                  FALLON CLINIC
+## 3 C00325936             250  PHYSICIAN     HARVARD FACULTY PHYSICIANS
+## 4 C00325936             500  PHYSICIAN MASSACHUSETTS GENERAL HOSPITAL
+## 5 C00325936            1000  PHYSICIAN MASSACHUSETTS GENERAL HOSPITAL
+## 6 C00325936             250  PHYSICIAN MASSACHUSETTS GENERAL HOSPITAL
+## # ... with 8 more variables: state &lt;chr&gt;, transaction_pgi &lt;chr&gt;,
+## #   cmte_name &lt;chr&gt;, cmte_state &lt;chr&gt;, cmte_dsgn &lt;chr&gt;, cmte_type &lt;chr&gt;,
+## #   cmte_party_affiliation &lt;chr&gt;, org_type &lt;chr&gt;</code></pre>
+>>>>>>> c20984a4cb3b1a5177462c958a08c567f37e0294
 </div>
 
 
