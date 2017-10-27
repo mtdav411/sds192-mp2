@@ -12,20 +12,32 @@ This project is so interesting and relevant to my life!
 
 ```{r, include=FALSE}
 library(tidyverse)
-library(babynames)
 library(scales)
 library(ggplot2)
 load("house_elections.rda")
 load("candidates.rda")
 load("committees.rda")
 load("contributions.rda")
+load("individuals.rda")
 ```
 
 
 ```{r}
+#selecting variables
 president <- candidates %>% filter(cand_office=="P") %>% select(cand_name,cand_party_affiliation,cand_election_yr,cand_state)
-comit <- committees %>% select(cmte_name, cmte_state, cmte_dsgn,cmte_type, cmte_party_affiliation, org_type) %>% filter (cmte_type=="Q")
-> 
+indiv <- individuals %>% select(cmte_id, transaction_amt, occupation, employer, state, transaction_pgi) %>% filter(state=="MA")
+comit <- committees %>% select(cmte_id, cmte_name, cmte_state, cmte_dsgn,cmte_type, cmte_party_affiliation, org_type) %>% filter (cmte_type=="Q")
 
+#recoding org_type
+comit$org_type[comit$org_type=="C"] <- "Corporation"
+comit$org_type[comit$org_type=="L"] <- "Labor organization"
+comit$org_type[comit$org_type=="M"] <- "Membership organization"
+comit$org_type[comit$org_type=="T"] <- "Trade association"
+comit$org_type[comit$org_type=="V"] <- "Cooperative"
+comit$org_type[comit$org_type=="W"] <- "Corporation without capital stock"
+
+#join
+df <- indiv %>% left_join(comit, by ="cmte_id")
+head(df) 
 ```
 
