@@ -43,3 +43,17 @@ ggplot(df, aes(x=factor(org_type), y=summ)) + geom_bar(stat="identity", aes(fill
 
 ```
 
+```{r}
+comit2 <- comit %>% select(cmte_id, cmte_party_affiliation, org_type)
+df2 <- merge(x=indiv, y=comit2, by= "cmte_id", all=TRUE)
+df2 <- df2 %>% filter(org_type %in% c("Corporation", "Labor organization", "Membership organization", "Trade association", "Cooperative", "Corporation without capital stock"))
+df2_summ <- merge(x=df2, y=df, by ="org_type", all=TRUE) %>% filter(state %in% c("MA"))
+
+```
+
+
+
+```{r}
+ggplot(df2_summ, aes(x=factor(org_type), y=summ, fill=cmte_party_affiliation)) + geom_bar(position="dodge",stat="identity")
+```
+
