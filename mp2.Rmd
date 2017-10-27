@@ -4,12 +4,12 @@ author: "Your Name Here"
 date: "October 31, 2017"
 output: html_document
 ---
-hhjgjh
+
 
 ## Loading the data
 
-This project is so interesting and relevant to my life! blue
-yellored ink 111111111111111
+This project is so interesting and relevant to my life!
+
 ```{r, include=FALSE}
 library(tidyverse)
 library(babynames)
@@ -23,6 +23,9 @@ load("contributions.rda")
 
 
 ```{r}
+president <- candidates %>% filter(cand_office=="P") %>% select(cand_name,cand_party_affiliation,cand_election_yr,cand_state)
+comit <- committees %>% select(cmte_name, cmte_state, cmte_dsgn,cmte_type, cmte_party_affiliation, org_type) %>% filter (cmte_type=="Q")
+> 
 
 ```
 
