@@ -23,10 +23,9 @@ load("individuals.rda")
 
 
 ```{r}
-#selecting variables
-president <- candidates %>% filter(cand_office=="P") %>% select(cand_name,cand_party_affiliation,cand_election_yr,cand_state)
-indiv <- individuals %>% select(cmte_id, transaction_amt, occupation, employer, state, transaction_pgi) %>% filter(state=="MA")
-comit <- committees %>% select(cmte_id, cmte_name, cmte_state, cmte_dsgn,cmte_type, cmte_party_affiliation, org_type) %>% filter (cmte_type=="Q")
+#selecting variables from raw datasets
+indiv <- individuals %>% select(cmte_id, transaction_amt, occupation, employer, state) %>% filter(state=="MA")
+comit <- committees %>% select(cmte_id, cmte_name, cmte_type, cmte_party_affiliation, org_type)
 
 #recoding org_type
 comit$org_type[comit$org_type=="C"] <- "Corporation"
@@ -38,6 +37,8 @@ comit$org_type[comit$org_type=="W"] <- "Corporation without capital stock"
 
 #join
 df <- indiv %>% left_join(comit, by ="cmte_id")
-head(df) 
+df <- df %>% group_by(org_type) %>% summarise(summ=sum(transaction_amt)) %>% filter(org_type %in% c("Corporation", "Labor organization", "Membership organization", "Trade association", "Cooperative", "Corporation without capital stock"))
+
+
 ```
 
