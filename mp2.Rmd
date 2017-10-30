@@ -36,9 +36,17 @@ comit$org_type[comit$org_type=="V"] <- "Cooperative"
 comit$org_type[comit$org_type=="W"] <- "Corporation w/o capital stock"
 comit$org_type[comit$org_type==" "] <- "NA"
 
+#recoding cmte_party_affiliation
+comit$cmte_party_affiliation[comit$cmte_party_affiliation==" "] <- "NA"
+comit$cmte_party_affiliation[comit$cmte_party_affiliation=="UNK"] <- "NA"
+comit$cmte_party_affiliation[comit$cmte_party_affiliation=="NNE"] <- "None"
+comit$cmte_party_affiliation[comit$cmte_party_affiliation=="REP"] <- "Rep"
+comit$cmte_party_affiliation[comit$cmte_party_affiliation=="DEM"] <- "Dem"
+
+
 #join
-df <- indiv %>% left_join(comit, by ="cmte_id")
-df <- df %>% group_by(org_type) %>% summarise(summ=sum(transaction_amt)) %>% filter(org_type %in% c("Corporation", "Labor organization", "Membership organization", "Trade association", "Cooperative", "Corporation w/o capital stock"))
+df1 <- indiv %>% left_join(comit, by ="cmte_id")
+df <- df1 %>% group_by(org_type) %>% summarise(summ=sum(transaction_amt)) %>% filter(org_type %in% c("Corporation", "Labor organization", "Membership organization", "Trade association", "Cooperative", "Corporation w/o capital stock"))
 
 #plot1
 ggplot(df, aes(x=factor(org_type), y=summ)) + geom_bar(stat="identity", aes(fill=factor(org_type))) + theme(axis.text.x=element_text(angle=90, hjust=1))
@@ -46,9 +54,8 @@ ggplot(df, aes(x=factor(org_type), y=summ)) + geom_bar(stat="identity", aes(fill
 ```
 
 ```{r}
-comit2 <- comit %>% select(cmte_id, cmte_party_affiliation, org_type)
-df2 <- merge(x=indiv, y=comit2, by= "cmte_id", all=TRUE) %>% filter(org_type %in% c("Corporation", "Labor organization", "Membership organization", "Trade association", "Cooperative", "Corporation w/o capital stock"))
-df2_summ <- merge(x=df2, y=df, by ="org_type", all=TRUE) %>% filter(state %in% c("MA"))
+df2 <- df1 %>% group_by(cmte_party_affiliation, org_type) %>% summarise(summ=sum(transaction_amt)) %>% filter(org_type %in% c("Corporation", "Labor organization", "Membership organization", "Trade association", "Cooperative", "Corporation w/o capital stock")) %>% filter(cmte_party_affiliation %in% c("None", "Rep", "Dem"))
+head(df2)
 
 ```
 
@@ -56,6 +63,6 @@ df2_summ <- merge(x=df2, y=df, by ="org_type", all=TRUE) %>% filter(state %in% c
 
 ```{r}
 #plot2
-ggplot(df2_summ, aes(x=factor(org_type), y=summ, fill=cmte_party_affiliation)) + geom_bar(position="dodge",stat="identity") + theme(axis.text.x=element_text(angle=90, hjust=1))
+#ggplot(df2_summ, aes(x=factor(org_type), y=summ, fill=cmte_party_affiliation)) + geom_bar(position="dodge",stat="identity") + theme(axis.text.x=element_text(angle=90, hjust=1))
 ```
 
