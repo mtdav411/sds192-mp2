@@ -1,16 +1,15 @@
 ---
 title: "Mini-Project 2"
-author: "Your Name Here"
+author: "Ren Tao, Angela Huang, David Munoz Tord"
 date: "October 31, 2017"
 output: html_document
 ---
 
 
-## Loading the data
+## Data Wrangling
 
-This project is so interesting and relevant to my life!
-
-```{r, include=FALSE}
+Introduction text
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
 library(tidyverse)
 library(scales)
 library(ggplot2)
@@ -34,13 +33,11 @@ commit$org_type[commit$org_type=="M"] <- "Membership organization"
 commit$org_type[commit$org_type=="T"] <- "Trade association"
 commit$org_type[commit$org_type=="V"] <- "Cooperative"
 commit$org_type[commit$org_type=="W"] <- "Corporation w/o capital stock"
-commit$org_type[commit$org_type==" "] <- "NA"
+commit$org_type[commit$org_type==""] <- "NA"
 
-
-
-#join
-df <- indiv %>% left_join(commit, by ="cmte_id")
-df <- df %>% group_by(org_type) %>% summarise(summ=sum(transaction_amt)) %>% filter(org_type %in% c("Corporation", "Labor organization", "Membership organization", "Trade association", "Cooperative", "Corporation w/o capital stock"))
+#join indiv$commit and filter out the NA
+df1 <- indiv %>% left_join(commit, by ="cmte_id")
+df <- df1 %>% group_by(org_type) %>% summarise(summ=sum(transaction_amt)) %>% filter(org_type %in% c("Corporation", "Labor organization", "Membership organization", "Trade association", "Cooperative", "Corporation w/o capital stock"))
 
 #plot1
 ggplot(df, aes(x=factor(org_type), y=summ)) + geom_bar(stat="identity", aes(fill=factor(org_type))) + theme(axis.text.x=element_text(angle=90, hjust=1))
@@ -48,24 +45,19 @@ ggplot(df, aes(x=factor(org_type), y=summ)) + geom_bar(stat="identity", aes(fill
 
 
 
-
 ```{r}
+#selecting variables from raw datasets
 indiv_state <- individuals %>% select(cmte_id, transaction_amt, occupation, employer, state)
+
+#recoding $state
+indiv_state$state[indiv_state$state==""] <- "NA"
+
+#join indiv_state&commit and filter out the NA
 df_state <- indiv_state %>% left_join(commit, by ="cmte_id")
+df_state <- df_state %>% group_by(state, org_type) %>% summarise(summ=sum(transaction_amt)) %>% filter(org_type != "NA", state %in% c("AL","AK","AZ","AR","CA","CO","CT","DE","FL","GA","HI","ID","IL","IN","IA","KS","KY","LA","ME","MD","MA","MI","MN","MS","MO","MT","NE","NV","NH","NJ","NM","NY","NC","ND","OH","OK","OR","PA","RI","SC","SD","TN","TX","UT","VT","VA","WA","WV","WI","WY"))
 
-#join2
-df_state <- df_state %>% group_by(org_type) %>% summarise(summ=sum(transaction_amt)) %>% filter(org_type %in% c("Corporation", "Labor organization", "Membership organization", "Trade association", "Cooperative", "Corporation w/o capital stock"))
-
-#plot2
+#plot_state
 ggplot(df_state, aes(x=factor(org_type), y=summ)) + geom_bar(stat="identity", aes(fill=factor(org_type))) + theme(axis.text.x=element_text(angle=90, hjust=1)) +   facet_wrap(~state)
-indiv_state <- individuals %>% select(cmte_id, transaction_amt, occupation, employer, state)
-df_state <- indiv_state %>% left_join(commit, by ="cmte_id")
-
-
-#df_state <- df_state %>% group_by(state, org_type) %>% summarise(summ=sum(transaction_amt)) %>% filter(org_type != "NA", state !=" ")
-#View(df_state)
-
-#ggplot(df_state, aes(x=factor(org_type), y=summ)) + geom_bar(stat="identity", aes(fill=factor(org_type))) + theme(axis.text.x=element_text(angle=90, hjust=1)) +   facet_wrap(~state)
 
 ```
-
+Explainig the graph
