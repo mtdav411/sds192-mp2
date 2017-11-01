@@ -4,14 +4,6 @@ author: "Ran Tao, Angela Huang, David Munoz Tord"
 date: "October 31, 2017"
 output: html_document
 ---
-
-
-## Data Wrangling
-
-
-This project is divided into two parts. In part1, we aim to figure out how the contribution amount from the committees  is distributed according to different organization types in Massachussates. In part2, we generalize our analysis to all individual states that the dataset contains. We combine our own data frames from getting variables mainly from raw data sets "individuals" and "committees". There are five organization types denoted as five letters in the raw data sets and we derive their meanings from original data set dictionary and rename them into plain English for easier understanding. 
-
-
 ```{r, message=FALSE, warning=FALSE, echo=FALSE}
 library(tidyverse)
 library(scales)
@@ -22,8 +14,11 @@ load("committees.rda")
 load("contributions.rda")
 load("individuals.rda")
 ```
+## Data Wrangling
+This project is divided into two parts. In part 1, we aim to figure out how the contribution amount from the committees  is distributed according to different organization types in Massachussates. In part 2, we generalize our analysis to all individual states that the dataset contains. We combine our own data frames from getting variables mainly from raw data sets "individuals" and "committees". There are five organization types denoted as five letters in the raw data sets and we derive their meanings from original data set dictionary and rename them into plain English for easier understanding. 
 
 
+# Part 1
 ```{r}
 #selecting variables from raw datasets
 indiv <- individuals %>% select(cmte_id, transaction_amt, occupation, employer, state) %>% filter(state=="MA")
@@ -46,11 +41,17 @@ df <- df1 %>% group_by(org_type) %>% summarise(summ=sum(transaction_amt)) %>% fi
 ggplot(df, aes(x=factor(org_type), y=summ)) + geom_bar(stat="identity", aes(fill=factor(org_type))) + theme(axis.text.x=element_text(angle=90, hjust=1))+labs(x="Org Type", y="Sum Amount")+scale_y_continuous(breaks=c(0,1000000,2000000,2700000), label=c("0","1000000","2000000","2700000"))
 ```
 
+From this graph, the y-axis stands for the sum of the contribution amount. We can see from the graph that membership orgnization contributes the most, compared to other organization types in Massachusates, while Corporation without capital stock contributes the least. 
 
+<<<<<<< HEAD
 From this graph, the y axis stands for the sum of the contribution amount. We can see from the graph that membership orgnization contributes the most, compared to other organization types in Massachusates, while Corporation without capital stock contributes the least. 
 
 
 ```{r fig.height=20, fig.width=22}
+=======
+#Part 2
+```{r}
+>>>>>>> ead17227d93bf93f2e0338a7616b051fc2e99a6a
 #selecting variables from raw datasets
 indiv_state <- individuals %>% select(cmte_id, transaction_amt, occupation, employer, state)
 
@@ -67,5 +68,5 @@ ggplot(df_state, aes(x=factor(org_type), y=summ)) + geom_bar(stat="identity", po
 
 ```
 
-This graph generalizes our anlaysis in MA to all individual states in the raw data sets.There are 50 states in total. The y axis represents the sum amount of the contribution from committees and the x axis of individual graph accounts for the five organization types. The whole graph aims to explain the distribution of contribution amount according to five organization types in 50 states. 
+This graph generalizes our anlaysis in MA to all individual states in the raw data sets.There are 50 states in total. The y-axis represents the sum amount of the contribution from committees and the x-axis of individual graph accounts for the five organization types. The whole graph aims to explain the distribution of contribution amount according to five organization types in 50 states. 
 
